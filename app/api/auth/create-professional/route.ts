@@ -43,8 +43,7 @@ export async function POST(req: NextRequest) {
       !companyName ||
       !email ||
       !password ||
-      !siren ||
-      !tvaNumber
+      !siren 
     ) {
       return NextResponse.json({ success: false, message: "Veuillez remplir tous les champs." });
     }
@@ -57,8 +56,11 @@ export async function POST(req: NextRequest) {
         status:400
       });
   }
+  const newUser = new User({annualRevenue,companyName,email,password,siren});
 
-  const newUser = new User({annualRevenue,companyName,email,password,siren,tvaNumber });
+  if(tvaNumber){
+    newUser.tvaNumber = tvaNumber;
+  }
  
   newUser.role = "professional";
   newUser.isVerified = true;

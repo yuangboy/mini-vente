@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/@/components/theme-provider";
 import Header from "@/src/components/Header";
 import Footer from "@/src/components/Footer";
+import LayoutWrapper from "./LayoutWrapper";
 
 
 const geistSans = Geist({
@@ -31,7 +32,6 @@ export default function RootLayout({
     >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
-       
       >
        <ThemeProvider
             attribute="class"
@@ -39,9 +39,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <LayoutWrapper>
             <Header/>
             {children}
             <Footer/>
+            </LayoutWrapper>
           </ThemeProvider>
       </body>
     </html>

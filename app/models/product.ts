@@ -1,4 +1,4 @@
-import { Document, Schema, model, Types } from "mongoose";
+import { Document, Schema, model, Types,models } from "mongoose";
 
 export interface IProduct extends Document {
   title: string;
@@ -6,8 +6,7 @@ export interface IProduct extends Document {
   price: number;
   category: string;
   image: string[] | null;
-  shippingCharge: string;
-  seller: Types.ObjectId;
+  seller: Schema.Types.ObjectId;
   typeClient: "particular" | "professional";
   productType: "high-end-phone" | "mid-range-phone" | "laptop";
 }
@@ -19,8 +18,11 @@ const ProductSchema = new Schema<IProduct>(
     price: { type: Number, required: true },
     category: { type: String, required: true },
     image: { type: [String], default: null },
-    shippingCharge: { type: String, required: true },
-    seller: { type: Schema.Types.ObjectId, ref: "User", required: true },
+   seller: {
+  type:Schema.Types.ObjectId,
+  ref: "User",
+  required: true
+},
     typeClient: {
       type: String,
       enum: ["particular", "professional"],
@@ -37,4 +39,4 @@ const ProductSchema = new Schema<IProduct>(
   }
 );
 
-export default model<IProduct>("Product", ProductSchema);
+export default models.Product || model<IProduct>("Product", ProductSchema);

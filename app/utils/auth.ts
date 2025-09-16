@@ -2,10 +2,13 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import RedisClient from "@/app/utils/redis";
 import { IUser } from "@/app/models/user";
+import {NextResponse} from "next/server";
+import { AuthenticatedRequest } from "@/types/AuthenticatedRequest";
 
-export async function getAuthenticatedUserFromCookie(req: Request): Promise<IUser | null> {
+export async function getAuthenticatedUserFromCookie(req: AuthenticatedRequest): Promise<IUser | null> {
   try {
     const cookieHeader = req.headers.get("cookie");
+    // if (!cookieHeader) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (!cookieHeader) return null;
 
     const cookies = Object.fromEntries(
@@ -16,9 +19,10 @@ export async function getAuthenticatedUserFromCookie(req: Request): Promise<IUse
     );
 
     const accessToken = cookies.accessToken;
+    // if (!accessToken) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     if (!accessToken) return null;
 
-    const decoded = jwt.verify(accessToken, process.env.NEXT_PUBLICACCESS_TOKEN as string) as JwtPayload;
+    const decoded = jwt.verify(accessToken, process.env.NEXT_PUBLIC_ACCESS_TOKEN as string) as JwtPayload;
     if (!decoded || !decoded.id) return null;
 
     const redis = RedisClient();
@@ -26,6 +30,7 @@ export async function getAuthenticatedUserFromCookie(req: Request): Promise<IUse
     if (!userData) return null;
 
     const user = JSON.parse(userData) as IUser;
+    req.user = user;
     return user;
   } catch (err) {
     console.error("Auth error:", err);

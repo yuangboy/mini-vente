@@ -1,4 +1,5 @@
 import {Schema,Document,model,Types,models} from "mongoose";
+import { getDynamicPrice } from "../api/product/create/route";
 
 
 export interface ICartItem extends Document{
@@ -6,12 +7,10 @@ export interface ICartItem extends Document{
     quantity:number;
 }
 
-
 export interface ICart extends Document{
     user:Types.ObjectId;
     items: ICartItem[];
 }
-
 
 const CartItemSchema=new Schema<ICartItem>({
     product:{type:Schema.Types.ObjectId,ref:"Product",required:true},

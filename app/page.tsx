@@ -21,6 +21,14 @@ export default function Home() {
   const tc2 = useRef(null);
   const pc1 = useRef(null);
 
+  interface IMenuItems {
+    label?: string;
+    onClick?: () => void;
+    href?: string;
+    icon?: React.ReactNode;
+    content?: React.ReactNode;
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setImageIndex((prev) => (prev + 1) % images.length);
@@ -39,7 +47,7 @@ export default function Home() {
       },
       scale: 1.4,
       ease: "power2.out",
-       x: 100,
+      x: 100,
     });
     gsap.to(pc1.current, {
       scrollTrigger: {
@@ -50,7 +58,7 @@ export default function Home() {
       },
       scale: 1.4,
       ease: "power2.out",
-       x: 150,
+      x: 150,
     });
 
     gsap.to(tc2.current, {
@@ -58,7 +66,7 @@ export default function Home() {
         trigger: refContainer1.current,
         start: "top center",
         end: "bottom center",
-        scrub: true,     
+        scrub: true,
       },
       scale: 1.5,
       ease: "bounce.in",
@@ -135,7 +143,9 @@ export default function Home() {
         ref={refSection2}
         className="relative z-50 h-screen bg-gray-100 flex items-center justify-center"
       >
-        <div className="text-4xl font-bold text-gray-800">Offres Spéciales 🔥</div>
+        <div className="text-4xl font-bold text-gray-800">
+          Offres Spéciales 🔥
+        </div>
       </section>
     </Scrollable>
   );

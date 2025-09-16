@@ -3,6 +3,7 @@ import { sendToken } from "@/app/utils/jwt";
 import bcrypt from "bcryptjs";
 import User,{ IUser } from "@/app/models/user";
 import { NextResponse } from "next/server";
+import { DBConnect } from "@/app/utils/bd";
 
 interface ILogin {
   email?: string;
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
 //   }
 
   try {
-
+    await DBConnect();
       const { email, password, telephone } = await req.json() as ILogin;
 
   if (!email || !password) {
@@ -72,7 +73,7 @@ export async function POST(req: Request) {
     
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ success: false, message: "Une erreur s'est produite" });
+    return NextResponse.json({ success: false, message: "Une erreur s'est produite" },{status:500});
     
   }
     
