@@ -3,7 +3,7 @@ import {IUser } from '../interface';
 
 
 interface UserState{
-    user:any | null;
+    user:  IUser| null;
     isEmailVerified: boolean;
     isLoginDialogOpen: boolean;
     isLoggedIn: boolean;

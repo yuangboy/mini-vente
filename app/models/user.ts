@@ -14,7 +14,7 @@ export interface IUser extends Document {
   profilePicture?: string;
   phoneNumber?: string;
   isVerified?: boolean;
-  role: string;
+  role: "particular" | "professional" | "admin";
   verificationCode?: string | null;
   verificationToken?: string | null;
   tokenExpiresAt?: Date | null;

@@ -1,10 +1,17 @@
-import {ProductFormData} from "@/app/book-sell/page";
+// import {ProductFormData} from "@/app/book-sell/page";
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { productDetails } from "../interface";
+
+
+interface Items{
+    product:productDetails;
+    quantity:number;
+}
 
 export interface CartSlice{
 _id:string,
 user:string,
-items:any,
+items:Items[],
 createdAt:string,
 updatedAt:string
 }

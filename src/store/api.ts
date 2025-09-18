@@ -196,7 +196,7 @@ export const api = createApi({
         body: formData,
       }),
     }),
-    getProducts: builder.query<{ success: boolean; data: any }, void>({
+    getProducts: builder.query<{ success: boolean; data: productDetails[] }, void>({
       query: () => ({
         url: API_URL.GET_PRODUCTS(),
         method: "GET",

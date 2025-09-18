@@ -1,5 +1,6 @@
   export interface IUser{  
-   firstName?: string;
+  _id?: string;
+  firstName?: string;
   lastName?: string;
   companyName?: string;
   siren?: string;
@@ -40,17 +41,12 @@ export interface productDetails{
     title:string;
     description?:string;
     price:number;
-    finalPrice:number;
     image:string[];
     category:string;
-    shippingCharge:string;
     seller:IUser;
-    paymentMode:"UPI" | "Bank Account";
-    paymentDetails:{upiId?:string,bankDetails?:{accountNumber:string,ifscCode:string,bankName:string}};
-    condition:string;
-    classType:string;
-    subject:string;
-    author?:string;
-    edition?:string;
+    typeClient: "particular" | "professional";
+    productType: "high-end-phone" | "mid-range-phone" | "laptop";
+    displayPrice?:string;
+    priceLabel?:string;
     createdAt?:string;
 }

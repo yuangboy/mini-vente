@@ -1,7 +1,7 @@
 "use client";
 
 import { LogInIcon, SearchIcon, ShoppingCart, LogOutIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import { Badge } from "@/components/ui/badge";
 import { ModeToggle } from "./ModeToggle";
 import { useTheme } from "next-themes";
@@ -17,16 +17,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import Link from "next/link";
 import Image from "next/image";
 import { DialogDemo } from "./FenAuthenticate";
 import { useSelector,useDispatch} from "react-redux";
 import { RootState} from "@store/store";
 import toast from "react-hot-toast";
-import { useLogoutUserMutation } from "@store/api";
+import { useLogoutUserMutation,useGetCartQuery} from "@store/api";
 import { logout } from "@store/slice/userSlice";
 import { resetState } from "@store/reset";
 import { authStatus } from "@store/slice/userSlice";
+import Link from "next/link";
  
 
 function Header() {
@@ -37,8 +37,11 @@ function Header() {
   const [showDialog, setShowDialog] = useState(false);
 
   const user = useSelector((state: RootState) => state.user.user);
+  const cart = useSelector((state: RootState) => state.cart);
   
   const [logoutUser,{isLoading:isLogoutLoading}]=useLogoutUserMutation();
+
+  const {data:cartData}=useGetCartQuery({userId:user?._id!},{skip:!user});
 
   const handleOnclick = (href: string) => {
     if (user) {
@@ -98,6 +101,26 @@ function Header() {
         },
       ];
 
+    
+        useEffect(()=>{
+
+    if(cartData?.success && cartData?.data){
+      console.log("cartDataaaaa: ",cartData);
+      dispatch({type:"cart/setCart",payload:cartData.data});
+    }
+
+  },[cartData,dispatch])
+  const clickCart = (href:string) => {
+
+    if(cart.items.length>0){
+      router.push(href);
+    }else{
+      toast.error("Votre panier est vide");
+    }
+    
+  }
+  
+
   return (
     <div className="hidden md:block sticky top-0 z-[999] bg-white shadow-md p-4">
       <div className="container flex mx-auto px-10 items-center justify-between">
@@ -113,15 +136,15 @@ function Header() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="relative">
+          <button className="relative cursor-pointer" onClick={() => clickCart("/checkout/cart")}>
             <ShoppingCart className="w-6 h-6" />
             <Badge
               className="absolute -top-3 -right-2 h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
               variant="destructive"
             >
-              99
+               {cart?.items?.length || 0}
             </Badge>
-          </div>
+          </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -139,8 +162,10 @@ function Header() {
                       className="rounded-full"
                     />
                     <div className="flex flex-col">
-                      <span className="font-semibold">John Doe</span>
-                      <span className="text-xs">Customer@gmail.com</span>
+                     {user.role==="particular" && ( <span className="font-semibold">{user?.lastName}</span>)} 
+                     {user.role==="professional" && ( <span className="font-semibold">{user?.companyName}</span>)} 
+                     {user.role==="admin" && ( <span className="font-semibold">Admin</span>)} 
+                      <span className="text-xs">{user.email}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
